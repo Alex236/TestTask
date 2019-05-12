@@ -29,12 +29,52 @@ namespace PriceChecker.ProductUpdater
             var products = new List<Product>();
             string page = GetPage(url);
             var nodes = GetProductContainers(page);
-            foreach(var node in nodes)
+            foreach (var node in nodes)
             {
-                Console.WriteLine(node.InnerHtml);
-                //parse to products
+                products.Add(ParseNodeToProduct(node));
             }
             return products;
+        }
+
+        private Product ParseNodeToProduct(HtmlNode node)
+        {
+            var product = new Product()
+            {
+                Url = GetProductUrl(node),
+                Name = GetProductName(node),
+                Price = GetProductPrice(node)
+            };
+            return product;
+        }
+
+        private string GetProductUrl(HtmlNode node)
+        {
+            var nodes = node.ChildNodes;
+            HtmlNode infoNode = null;
+            foreach (var currentNode in nodes)
+            {
+                if (currentNode.GetAttributeValue("class", "") == "product-name is-truncated")
+                {
+                    infoNode = currentNode;
+                    break;
+                }
+            }
+            var aNode = infoNode.ChildNodes;
+            Console.WriteLine(infoNode.InnerText);
+            foreach (var currentNode in aNode)
+            {
+            }
+            return null;
+        }
+
+        private string GetProductName(HtmlNode node)
+        {
+            return "";
+        }
+
+        private double GetProductPrice(HtmlNode node)
+        {
+            return 0;
         }
 
         private List<HtmlNode> GetProductContainers(string page)
