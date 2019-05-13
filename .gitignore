@@ -28,3 +28,6 @@ Temporary Items
 node_modules
 PriceChecker/bin
 PriceChecker/obj
+
+PriceChecker.Tests/bin
+PriceChecker.Tests/obj
