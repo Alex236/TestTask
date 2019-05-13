@@ -1,25 +1,34 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using PriceChecker.DbProducts;
-using System;
+using PriceChecker.DbProducts.Models;
 
 
 namespace PriceChecker.DbProducts
 {
     public class DbProductContext : DbContext
     {
-        public DbSet<ProductModel> Products { get; set; }
-        private IConfiguration Configuration;
-
-        public DbProductContext(IConfiguration configuration)
+        private static DbProductContext instance = null;
+        static DbProductContext()
         {
-            Configuration = configuration;
+            instance = new DbProductContext();
+        }
+
+        public DbSet<Product> Products { get; set; }
+        public DbSet<PriceByDate> Prices { get; set; }
+
+        private DbProductContext()
+        {
             Database.EnsureCreated();
+        }
+
+        public static DbProductContext GetInstance()
+        {
+            return instance;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlite("Data Source=data.db");
         }
     }
 }

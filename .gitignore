@@ -25,6 +25,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+node_modules
 PriceChecker/bin
 PriceChecker/obj
 PriceChecker/data.db

@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using PriceChecker.DbProducts;
 using PriceChecker.ProductUpdater;
+using PriceChecker.Hubs;
 
 
 namespace PriceChecker
@@ -21,15 +22,14 @@ namespace PriceChecker
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-            ProductContext = new DbProductContext(configuration);
-            Updater updater = new Updater(ProductContext);
-            updater.StartUpdatingByTimer();
+            DbProductContext.GetInstance();
+            //Updater updater = new Updater(ProductContext);
+            //updater.StartUpdatingByTimer();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -40,6 +40,11 @@ namespace PriceChecker
             }
 
             app.UseFileServer();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<PricesHub>("/priceChecker");
+            });
         }
     }
 }
