@@ -6,14 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .productContainer {
+            width: 100%;
+            padding-right: 20%;
+            padding-left: 20%;
+        }
+
+        .loadMore {
+            align-items: center;
+            margin-left: 20%;
+            margin-right: 20%;
+        }
+    </style>
     <title>PriceChecker</title>
 </head>
 
 <body>
     <div id="productsContainer"></div>
-    <div>
-        <input type="button" id="LoadMore" value="Load More" />
-    </div>
+    <input type="button" id="LoadMore" class="loadMore" value="Load More" />
     <script src="./lib/signalr.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="./js/main.js"></script>

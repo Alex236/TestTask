@@ -31,23 +31,65 @@ namespace PriceChecker.ProductUpdater
             var nodes = GetProductContainers(page);
             foreach (var node in nodes)
             {
-                products.Add(ParseNodeToProduct(node));
+                var product = ParseNodeToProduct(node);
+                if (product != null)
+                {
+                    products.Add(product);
+                }
             }
             return products;
         }
 
         private Product ParseNodeToProduct(HtmlNode node)
         {
-            var product = new Product()
+            string url = GetProductUrl(node);
+            string imageUrl = GetImageUrl(node);
+            string name = GetProductName(node);
+            string price = GetProductPrice(node);
+            if (price != string.Empty)
             {
-                Url = GetProductUrl(node),
-                Name = GetProductName(node),
-                Price = GetProductPrice(node)
-            };
-            return product;
+                return new Product()
+                {
+                    Url = url,
+                    ImageUrl = imageUrl,
+                    Name = name,
+                    Price = Double.Parse(price)
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private string GetImageUrl(HtmlNode node)
+        {
+            return "";
         }
 
         private string GetProductUrl(HtmlNode node)
+        {
+            Console.Write(node.InnerHtml);
+            var nodes = node.ChildNodes;
+            HtmlNode infoNode = null;
+            foreach (var currentNode in nodes)
+            {
+                if (currentNode.GetAttributeValue("class", "") == "product-name is-truncated")
+                {
+                    infoNode = currentNode;
+                    break;
+                }
+            }
+            var aNode = infoNode.ChildNodes;
+            string url = String.Empty;
+            foreach (var currentNode in aNode)
+            {
+                url = currentNode.GetAttributeValue("href", "");
+            }
+            return url;
+        }
+
+        private string GetProductName(HtmlNode node)
         {
             var nodes = node.ChildNodes;
             HtmlNode infoNode = null;
@@ -60,21 +102,27 @@ namespace PriceChecker.ProductUpdater
                 }
             }
             var aNode = infoNode.ChildNodes;
-            Console.WriteLine(infoNode.InnerText);
+            string name = String.Empty;
             foreach (var currentNode in aNode)
             {
+                name = currentNode.GetAttributeValue("title", "");
             }
-            return null;
+            return name;
         }
 
-        private string GetProductName(HtmlNode node)
+        private string GetProductPrice(HtmlNode node)
         {
-            return "";
-        }
-
-        private double GetProductPrice(HtmlNode node)
-        {
-            return 0;
+            var nodes = node.ChildNodes;
+            HtmlNode infoNode = null;
+            foreach (var currentNode in nodes)
+            {
+                if (currentNode.GetAttributeValue("class", "") == "price")
+                {
+                    infoNode = currentNode;
+                    return infoNode.InnerText;
+                }
+            }
+            return string.Empty;
         }
 
         private List<HtmlNode> GetProductContainers(string page)

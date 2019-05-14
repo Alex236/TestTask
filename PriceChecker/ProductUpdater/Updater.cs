@@ -25,7 +25,15 @@ namespace PriceChecker.ProductUpdater
         private void GetListOfProducts()
         {
             CatalogReader reader = new CatalogReader();
-            reader.ReadCatalog("https://yellow.ua/apple/");
+            var catalogs = new string[]
+            {
+                "https://yellow.ua/apple/"
+            };
+            foreach (var catalog in catalogs)
+            {
+                var list = reader.ReadCatalog(catalog);
+                
+            }
         }
     }
 }

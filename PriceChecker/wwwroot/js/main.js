@@ -11,11 +11,14 @@ class Product {
 
     createNode() {
         var node = document.createElement("div");
+        node.setAttribute("class", "productContainer");
         node.id = this.id;
         var name = document.createElement("h4");
         name.innerText = this.name;
         var image = document.createElement("img");
         image.setAttribute("src", this.imageUrl);
+        image.setAttribute("alt", this.Name);
+        image.setAttribute("height", "150px");
         var link = document.createElement("a");
         link.innerText = "link to market";
         link.setAttribute("href", this.url);
@@ -75,13 +78,12 @@ connection.on("getPrices", function (prices) {
         list.push([date = "Date", _price = "Price"]);
         parsedPrices.forEach(price => list.push([date = price.Time, _price = price.Price]));
         var data = google.visualization.arrayToDataTable(list);
-
         var options = {
             vAxis: { minValue: 0 }
         };
         var shedule = document.createElement("div");
         shedule.setAttribute("id", "shedule");
-        shedule.setAttribute("style", "width: 40%; height: 500px");
+        shedule.setAttribute("style", "width: 40%; height: 200px");
         document.getElementById(parsedPrices[0].ProductId).appendChild(shedule);
         var chart = new google.visualization.AreaChart(shedule);
         chart.draw(data, options);
